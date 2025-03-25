@@ -71,9 +71,18 @@ def plotData(df1: DataFrame, df2: DataFrame, fp: Path) -> None:
     ),
     required=True,
 )
-def main(figOutput: Path, dataOutput: Path) -> None:
-    df1: DataFrame = createData(xMin=0, xMax=10, a=1, _class=0)
-    df2: DataFrame = createData(xMin=0, xMax=10, a=2, _class=1)
+@click.option(
+    "--samples",
+    "samples",
+    help="Number of samples to generate",
+    type=int,
+    default=50,
+    required=False,
+    show_default=True,
+)
+def main(figOutput: Path, dataOutput: Path, samples: int) -> None:
+    df1: DataFrame = createData(xMin=0, xMax=samples, a=1, _class=0)
+    df2: DataFrame = createData(xMin=0, xMax=samples, a=2, _class=1)
 
     plotData(df1=df1, df2=df2, fp=figOutput)
 
