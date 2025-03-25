@@ -8,9 +8,14 @@ import pandas
 from pandas import DataFrame
 
 
-def createData(xMin: int, xMax: int, a: int, _class: int = 0) -> DataFrame:
+def createIncreasingData(
+    xMin: int,
+    xMax: int,
+    a: int,
+    _class: int = 0,
+) -> DataFrame:
     """
-    Create linearly seperable data from the following formula:
+    Create data from the following formula:
 
     `y = x + a`
 
@@ -29,6 +34,32 @@ def createData(xMin: int, xMax: int, a: int, _class: int = 0) -> DataFrame:
     return DataFrame(data=data)
 
 
+def createDecreasingData(
+    xMin: int,
+    xMax: int,
+    a: int,
+    _class: int = 1,
+) -> DataFrame:
+    """
+    Create data from the following formula:
+
+    `y = a - x`
+
+    Where `x` is a value from [xMin, xMax] and `a` is a constant.
+    `_class` is an integer label for the (x, y) pairing.
+    """
+
+    data: dict[str, List[int]] = defaultdict(list)
+
+    x: int
+    for x in range(xMin, xMax, 1):
+        data["x"].append(x)
+        data["y"].append(a - x)
+        data["class"].append(_class)
+
+    return DataFrame(data=data)
+
+
 def plotData(df1: DataFrame, df2: DataFrame, fp: Path) -> None:
     """
     Plot two DataFrames on the same figure and save to a file
@@ -37,7 +68,7 @@ def plotData(df1: DataFrame, df2: DataFrame, fp: Path) -> None:
     plt.scatter(x=df1["x"], y=df1["y"], marker="x")
     plt.scatter(x=df2["x"], y=df2["y"], marker="o")
 
-    plt.title(label="Linearly Seperable Data Example")
+    plt.title(label="Linearly Inseperable Data Example")
     plt.xlabel(xlabel="X Values")
     plt.ylabel(ylabel="Y Values")
 
@@ -72,8 +103,8 @@ def plotData(df1: DataFrame, df2: DataFrame, fp: Path) -> None:
     required=True,
 )
 def main(figOutput: Path, dataOutput: Path) -> None:
-    df1: DataFrame = createData(xMin=0, xMax=10, a=1, _class=0)
-    df2: DataFrame = createData(xMin=0, xMax=10, a=2, _class=1)
+    df1: DataFrame = createDecreasingData(xMin=0, xMax=10, a=10)
+    df2: DataFrame = createIncreasingData(xMin=0, xMax=10, a=1)
 
     plotData(df1=df1, df2=df2, fp=figOutput)
 
